@@ -1,5 +1,6 @@
 package com.insight.challenge.insighttrackingplatform.models;
 
+import java.util.UUID;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -11,11 +12,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8803824749850380007L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private UUID id;
 
 	private String name;
 
@@ -23,11 +28,11 @@ public class User implements Serializable {
 
 	private String address;
 
-	public long getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
