@@ -65,10 +65,19 @@ public class ActivitiesResource {
 		activitiesRepository.delete(activity);
 	}
 
-	@PutMapping("/activities")
+	@PutMapping("/activities/{user_id}")
 	@ApiOperation(value = "Updates a activity.")
-	public Activity updateActivity(@RequestBody Activity activity) {
-		return activitiesRepository.save(activity);
+	public Activity updateActivity(@RequestBody Activity activity, @PathVariable(value = "user_id") UUID user_id) {
+		User user = usersRepository.findById(user_id);
+		Activity oldActivity = activitiesRepository.findById(activity.getId());
+		Activity newActivity = new Activity(activity.getName(), activity.getDescription(), activity.getYear(), user);
+		List<Activity> userActivities = user.getActivities();
+		userActivities.remove(oldActivity);
+		activitiesRepository.delete(oldActivity);
+		userActivities.add(newActivity);
+		user.setActivities(userActivities);
+
+		return activitiesRepository.save(newActivity);
 	}
 
 }
