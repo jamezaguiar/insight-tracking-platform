@@ -33,38 +33,38 @@ public class UsersResource {
 	ActivitiesRepository activitiesRepository;
 
 	@GetMapping("/users")
-	@ApiOperation(value = "Returns the list of users registered in the application")
+	@ApiOperation(value = "Returns a list of users registered in the application.")
 	public List<User> listUsers() {
 		return usersRepository.findAll();
 	}
 
 	@GetMapping("/users/activities")
-	@ApiOperation(value = "Returns the list of users with a common activity")
+	@ApiOperation(value = "Returns a list of users with a common activity.")
 	public List<User> listUsersByActivity(@RequestParam String activity_name) {
 		return usersRepository.findByActivitiesName(activity_name);
 	}
 
 	@GetMapping("/users/{id}")
-	@ApiOperation(value = "Returns a user according to the given id")
+	@ApiOperation(value = "Returns a user according to the given id.")
 	public User listUserById(@PathVariable(value = "id") UUID id) {
 		return usersRepository.findById(id);
 	}
 
 	@PostMapping("/users")
-	@ApiOperation(value = "Register a user in the application")
+	@ApiOperation(value = "Register a user in the application.")
 	public User registerUser(@RequestBody User user) {
 		return usersRepository.save(user);
 	}
 
 	@DeleteMapping("/users")
-	@ApiOperation(value = "Deletes a user according to the given id")
+	@ApiOperation(value = "Deletes a user according to the given id.")
 	public void deleteUser(@RequestParam UUID user_id) {
 		User user = usersRepository.findById(user_id);
 		usersRepository.delete(user);
 	}
 
 	@PutMapping("/users")
-	@ApiOperation(value = "Updates a user")
+	@ApiOperation(value = "Updates a user.")
 	public User updateUser(@RequestBody User user) {
 		return usersRepository.save(user);
 	}
