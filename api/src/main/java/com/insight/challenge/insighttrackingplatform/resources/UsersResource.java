@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/api")
 @CrossOrigin(origins = "*")
-public class UserResource {
+public class UsersResource {
 
 	@Autowired
 	UsersRepository usersRepository;

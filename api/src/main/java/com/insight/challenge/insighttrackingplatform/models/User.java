@@ -1,5 +1,6 @@
 package com.insight.challenge.insighttrackingplatform.models;
 
+import java.util.List;
 import java.util.UUID;
 import java.io.Serializable;
 
@@ -7,15 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8803824749850380007L;
 
 	@Id
@@ -28,13 +27,8 @@ public class User implements Serializable {
 
 	private String address;
 
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
+	@OneToMany
+	private List<Activity> activities;
 
 	public String getName() {
 		return name;
@@ -59,4 +53,17 @@ public class User implements Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
+	public List<Activity> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(List<Activity> activities) {
+		this.activities = activities;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
 }
