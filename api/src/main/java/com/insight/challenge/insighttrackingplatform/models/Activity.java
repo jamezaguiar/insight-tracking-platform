@@ -7,8 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "activities")
@@ -27,7 +30,21 @@ public class Activity implements Serializable {
 	private int year;
 
 	@ManyToOne
+	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	private User user;
+
+	public Activity() {
+		super();
+	}
+
+	public Activity(String name, String description, int year, User user) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.year = year;
+		this.user = user;
+	}
 
 	public String getName() {
 		return name;

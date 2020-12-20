@@ -27,7 +27,7 @@ public class User implements Serializable {
 
 	private String address;
 
-	@OneToMany
+	@OneToMany(mappedBy = "user")
 	private List<Activity> activities;
 
 	public String getName() {
