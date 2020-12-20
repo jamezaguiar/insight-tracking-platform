@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insight.challenge.insighttrackingplatform.models.User;
+import com.insight.challenge.insighttrackingplatform.repositories.ActivitiesRepository;
 import com.insight.challenge.insighttrackingplatform.repositories.UsersRepository;
 
 import io.swagger.annotations.ApiOperation;
@@ -28,10 +29,19 @@ public class UsersResource {
 	@Autowired
 	UsersRepository usersRepository;
 
+	@Autowired
+	ActivitiesRepository activitiesRepository;
+
 	@GetMapping("/users")
 	@ApiOperation(value = "Returns the list of users registered in the application")
 	public List<User> listUsers() {
 		return usersRepository.findAll();
+	}
+
+	@GetMapping("/users/activities")
+	@ApiOperation(value = "Returns the list of users with a common activity")
+	public List<User> listUsersByActivity(@RequestParam String activity_name) {
+		return usersRepository.findByActivitiesName(activity_name);
 	}
 
 	@GetMapping("/users/{id}")

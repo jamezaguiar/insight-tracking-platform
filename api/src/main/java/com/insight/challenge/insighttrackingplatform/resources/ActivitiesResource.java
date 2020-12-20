@@ -34,19 +34,19 @@ public class ActivitiesResource {
 	ActivitiesRepository activitiesRepository;
 
 	@GetMapping("/activities")
-	@ApiOperation(value = "Returns a list with all activities registered in the application")
+	@ApiOperation(value = "Returns a list with all activities registered in the application.")
 	public List<Activity> listActivities() {
 		return activitiesRepository.findAll();
 	}
-	
+
 	@GetMapping("/activities/{user_id}")
-	@ApiOperation(value="Returns a list with all user activities")
+	@ApiOperation(value = "Returns a list with all user activities.")
 	public List<Activity> listUserActivities(@PathVariable(value = "user_id") UUID user_id) {
 		return activitiesRepository.findByUserId(user_id);
 	}
 
 	@PostMapping("/activities/{user_id}")
-	@ApiOperation(value = "Records an activity for a specific user")
+	@ApiOperation(value = "Records an activity for a specific user.")
 	public Activity registerActivity(@RequestBody Activity activity, @PathVariable(value = "user_id") UUID user_id) {
 		User user = usersRepository.findById(user_id);
 		Activity newActivity = new Activity(activity.getName(), activity.getDescription(), activity.getYear(), user);
@@ -57,16 +57,16 @@ public class ActivitiesResource {
 		return activitiesRepository.save(newActivity);
 
 	}
-	
+
 	@DeleteMapping("/activities")
-	@ApiOperation(value = "Deletes a activity according to the given id")
+	@ApiOperation(value = "Deletes a activity according to the given id.")
 	public void deleteActivity(@RequestParam UUID activity_id) {
 		Activity activity = activitiesRepository.findById(activity_id);
 		activitiesRepository.delete(activity);
 	}
 
 	@PutMapping("/activities")
-	@ApiOperation(value = "Updates a activity")
+	@ApiOperation(value = "Updates a activity.")
 	public Activity updateActivity(@RequestBody Activity activity) {
 		return activitiesRepository.save(activity);
 	}

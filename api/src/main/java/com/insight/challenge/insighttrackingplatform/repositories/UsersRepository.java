@@ -1,5 +1,6 @@
 package com.insight.challenge.insighttrackingplatform.repositories;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,5 @@ public interface UsersRepository extends JpaRepository<User, Long> {
 
 	User findById(UUID id);
 
+	List<User> findByActivitiesName(String activity_name);
 }
