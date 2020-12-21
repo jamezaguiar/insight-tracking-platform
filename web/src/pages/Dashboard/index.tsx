@@ -38,6 +38,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div>
             <button type="button">Ver atividades</button>
+            <button type="button">Editar</button>
             <button type="button">Excluir</button>
           </div>
         </Candidate>
@@ -48,6 +49,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div>
             <button type="button">Ver atividades</button>
+            <button type="button">Editar</button>
             <button type="button">Excluir</button>
           </div>
         </Candidate>
