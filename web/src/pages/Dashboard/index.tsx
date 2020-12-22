@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import { FiPlus, FiSearch } from 'react-icons/fi';
+
+import api from '../../services/api';
 
 import {
   Container,
@@ -11,7 +12,21 @@ import {
   Candidate,
 } from './styles';
 
+interface Candidate {
+  id: string;
+  name: string;
+  email: string;
+}
+
 const Dashboard: React.FC = () => {
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+
+  useEffect(() => {
+    api.get('/candidates').then((response) => {
+      setCandidates(response.data);
+    });
+  }, []);
+
   return (
     <Container>
       <LogoContainer>
@@ -31,32 +46,21 @@ const Dashboard: React.FC = () => {
         </span>
       </Options>
       <CandidatesContainer>
-        <Candidate>
-          <div>
-            <strong>Jamerson Aguiar</strong>
-            <p>jamersonalsilva14@gmail.com</p>
-          </div>
-          <div>
-            <Link to="/activities/candidate_id">
-              <button type="button">Ver atividades</button>
-            </Link>
-            <button type="button">Editar</button>
-            <button type="button">Excluir</button>
-          </div>
-        </Candidate>
-        <Candidate>
-          <div>
-            <strong>Jamerson Aguiar</strong>
-            <p>jamersonalsilva14@gmail.com</p>
-          </div>
-          <div>
-            <Link to="/activities/candidate_id">
-              <button type="button">Ver atividades</button>
-            </Link>
-            <button type="button">Editar</button>
-            <button type="button">Excluir</button>
-          </div>
-        </Candidate>
+        {candidates.map((candidate) => (
+          <Candidate key={candidate.id}>
+            <div>
+              <strong>{candidate.name}</strong>
+              <p>{candidate.email}</p>
+            </div>
+            <div>
+              <Link to={`activities/${candidate.id}`}>
+                <button type="button">Ver atividades</button>
+              </Link>
+              <button type="button">Editar</button>
+              <button type="button">Excluir</button>
+            </div>
+          </Candidate>
+        ))}
       </CandidatesContainer>
     </Container>
   );
