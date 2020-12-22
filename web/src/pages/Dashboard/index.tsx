@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiSearch } from 'react-icons/fi';
 
+import { useToast } from '../../hooks/toast';
+
 import api from '../../services/api';
 
 import {
@@ -19,6 +21,8 @@ interface Candidate {
 }
 
 const Dashboard: React.FC = () => {
+  const { addToast } = useToast();
+
   const [candidates, setCandidates] = useState<Candidate[]>([]);
 
   const handleGetCandidates = useCallback(async () => {
@@ -28,10 +32,23 @@ const Dashboard: React.FC = () => {
 
   const handleDeleteCandidate = useCallback(
     async (candidate_id: string) => {
-      await api.delete(`/candidates?candidate_id=${candidate_id}`);
-      handleGetCandidates();
+      try {
+        await api.delete(`/candidates?candidate_id=${candidate_id}`);
+        handleGetCandidates();
+        addToast({
+          title: 'Feito!',
+          type: 'success',
+          description: 'Candidato excluído com sucesso!',
+        });
+      } catch (err) {
+        addToast({
+          title: 'Algo deu errado.',
+          type: 'error',
+          description: 'Não foi possível excluir o candidato, tente novamente.',
+        });
+      }
     },
-    [handleGetCandidates],
+    [addToast, handleGetCandidates],
   );
 
   useEffect(() => {
