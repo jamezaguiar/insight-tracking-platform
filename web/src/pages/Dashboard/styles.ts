@@ -33,10 +33,14 @@ export const Options = styled.div`
 
   font-size: 24px;
 
-  span {
+  a {
     display: flex;
     align-items: center;
     margin: 16px;
+
+    text-decoration: none;
+
+    color: #ddd;
 
     transition: color 0.2s;
 

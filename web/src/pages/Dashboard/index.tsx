@@ -47,14 +47,14 @@ const Dashboard: React.FC = () => {
         />
       </LogoContainer>
       <Options>
-        <span>
+        <Link to="/new-candidate">
           <FiPlus size={24} />
           Cadastrar candidato
-        </span>
-        <span>
+        </Link>
+        <Link to="/find-candidates">
           <FiSearch size={24} />
           Buscar candidatos por atividade
-        </span>
+        </Link>
       </Options>
       <CandidatesContainer>
         {candidates.map((candidate) => (
