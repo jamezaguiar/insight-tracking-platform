@@ -8,18 +8,15 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
-export const LogoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+export const CandidateInfo = styled.div`
+  margin-top: 60px;
 
-  font-size: 14px;
+  font-size: 32px;
+  text-align: center;
 
-  margin-top: 32px;
-
-  img {
-    width: 300px;
+  p {
+    font-size: 26px;
+    margin-top: 8px;
   }
 `;
 
@@ -33,10 +30,14 @@ export const Options = styled.div`
 
   font-size: 24px;
 
-  span {
+  span,
+  a {
     display: flex;
     align-items: center;
     margin: 16px;
+
+    text-decoration: none;
+    color: #ddd;
 
     transition: color 0.2s;
 
@@ -52,11 +53,11 @@ export const Options = styled.div`
   }
 `;
 
-export const CandidatesContainer = styled.div`
+export const ActivitiesContainer = styled.div`
   margin-top: 80px;
 `;
 
-export const Candidate = styled.div`
+export const Activity = styled.div`
   width: 95vw;
   padding: 24px;
 
@@ -78,7 +79,7 @@ export const Candidate = styled.div`
     margin-top: 16px;
   }
 
-  strong {
+  h1 {
     color: #000;
   }
 

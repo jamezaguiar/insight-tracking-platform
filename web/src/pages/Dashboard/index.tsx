@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { FiPlus, FiSearch } from 'react-icons/fi';
 
@@ -18,7 +19,6 @@ const Dashboard: React.FC = () => {
           src="https://insightlab.ufc.br/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2020/02/LogoInsight.png.webp"
           alt="Insight Logo"
         />
-        <h1>Tracking Platform</h1>
       </LogoContainer>
       <Options>
         <span>
@@ -37,7 +37,9 @@ const Dashboard: React.FC = () => {
             <p>jamersonalsilva14@gmail.com</p>
           </div>
           <div>
-            <button type="button">Ver atividades</button>
+            <Link to="/activities/candidate_id">
+              <button type="button">Ver atividades</button>
+            </Link>
             <button type="button">Editar</button>
             <button type="button">Excluir</button>
           </div>
@@ -48,7 +50,9 @@ const Dashboard: React.FC = () => {
             <p>jamersonalsilva14@gmail.com</p>
           </div>
           <div>
-            <button type="button">Ver atividades</button>
+            <Link to="/activities/candidate_id">
+              <button type="button">Ver atividades</button>
+            </Link>
             <button type="button">Editar</button>
             <button type="button">Excluir</button>
           </div>
