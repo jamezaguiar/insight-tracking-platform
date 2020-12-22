@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import { FiPlus, FiChevronLeft } from 'react-icons/fi';
 
+import Button from '../../components/Button';
+
 import api from '../../services/api';
 
 import {
@@ -81,16 +83,16 @@ const Activities: React.FC = () => {
               </div>
               <div>
                 <Link to={`/edit-activity/${activity.id}`}>
-                  <button type="button">Editar</button>
+                  <Button type="button">Editar</Button>
                 </Link>
-                <button
+                <Button
                   type="button"
                   onClick={() => {
                     handleDeleteCandidateActivity(activity.id);
                   }}
                 >
                   Excluir
-                </button>
+                </Button>
               </div>
             </Activity>
           ))}

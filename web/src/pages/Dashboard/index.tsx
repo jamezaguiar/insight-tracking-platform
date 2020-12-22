@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiSearch } from 'react-icons/fi';
 
+import Button from '../../components/Button';
+
 import { useToast } from '../../hooks/toast';
 
 import api from '../../services/api';
@@ -82,17 +84,17 @@ const Dashboard: React.FC = () => {
             </div>
             <div>
               <Link to={`activities/${candidate.id}`}>
-                <button type="button">Ver atividades</button>
+                <Button type="button">Ver atividades</Button>
               </Link>
               <Link to={`edit-candidate/${candidate.id}`}>
-                <button type="button">Editar</button>
+                <Button type="button">Editar</Button>
               </Link>
-              <button
+              <Button
                 type="button"
                 onClick={() => handleDeleteCandidate(candidate.id)}
               >
                 Excluir
-              </button>
+              </Button>
             </div>
           </Candidate>
         ))}

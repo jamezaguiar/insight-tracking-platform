@@ -78,9 +78,7 @@ export const Candidate = styled.div`
 
   border-radius: 2px;
 
-  & + div {
-    margin-top: 16px;
-  }
+  margin-bottom: 16px;
 
   strong {
     color: #000;
