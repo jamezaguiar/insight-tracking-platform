@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiSearch } from 'react-icons/fi';
 
@@ -21,11 +21,22 @@ interface Candidate {
 const Dashboard: React.FC = () => {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
 
-  useEffect(() => {
-    api.get('/candidates').then((response) => {
-      setCandidates(response.data);
-    });
+  const handleGetCandidates = useCallback(async () => {
+    const response = await api.get('/candidates');
+    setCandidates(response.data);
   }, []);
+
+  const handleDeleteCandidate = useCallback(
+    async (candidate_id: string) => {
+      await api.delete(`/candidates?candidate_id=${candidate_id}`);
+      handleGetCandidates();
+    },
+    [handleGetCandidates],
+  );
+
+  useEffect(() => {
+    handleGetCandidates();
+  }, [handleGetCandidates]);
 
   return (
     <Container>
@@ -57,7 +68,12 @@ const Dashboard: React.FC = () => {
                 <button type="button">Ver atividades</button>
               </Link>
               <button type="button">Editar</button>
-              <button type="button">Excluir</button>
+              <button
+                type="button"
+                onClick={() => handleDeleteCandidate(candidate.id)}
+              >
+                Excluir
+              </button>
             </div>
           </Candidate>
         ))}
