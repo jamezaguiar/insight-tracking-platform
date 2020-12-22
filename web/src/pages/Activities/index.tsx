@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import { FiPlus, FiChevronLeft } from 'react-icons/fi';
 
@@ -34,35 +34,45 @@ const Activities: React.FC = () => {
   const { params } = useRouteMatch<ActivitiesParams>();
   const [candidate, setCandidate] = useState<Candidate | null>(null);
 
-  useEffect(() => {
-    api.get(`/candidates/${params.candidate_id}`).then((response) => {
-      setCandidate(response.data);
-    });
+  const handleGetCandidate = useCallback(async () => {
+    const response = await api.get(`/candidates/${params.candidate_id}`);
+    setCandidate(response.data);
   }, [params.candidate_id]);
 
+  const handleDeleteCandidateActivity = useCallback(
+    async (activity_id: string) => {
+      await api.delete(`/activities?activity_id=${activity_id}`);
+      handleGetCandidate();
+    },
+    [handleGetCandidate],
+  );
+
+  useEffect(() => {
+    handleGetCandidate();
+  }, [handleGetCandidate]);
+
   return (
-    <Container>
-      {candidate && (
+    candidate && (
+      <Container>
         <CandidateInfo>
           <h1>{candidate.name}</h1>
           <p>{candidate.email}</p>
           <p>{candidate.address}</p>
         </CandidateInfo>
-      )}
-      <Options>
-        <Link to="/">
-          <FiChevronLeft size={24} />
-          Voltar
-        </Link>
-        <span>
-          <FiPlus size={24} />
-          Cadastrar atividade
-        </span>
-      </Options>
 
-      <ActivitiesContainer>
-        {candidate &&
-          candidate.activities.map((activity) => (
+        <Options>
+          <Link to="/">
+            <FiChevronLeft size={24} />
+            Voltar
+          </Link>
+          <Link to={`/new-activity/${candidate.id}`}>
+            <FiPlus size={24} />
+            Cadastrar atividade
+          </Link>
+        </Options>
+
+        <ActivitiesContainer>
+          {candidate.activities.map((activity) => (
             <Activity key={activity.id}>
               <div>
                 <h1>{activity.name}</h1>
@@ -70,13 +80,23 @@ const Activities: React.FC = () => {
                 <p>{activity.year}</p>
               </div>
               <div>
-                <button type="button">Editar</button>
-                <button type="button">Excluir</button>
+                <Link to={`/edit-activity/${activity.id}`}>
+                  <button type="button">Editar</button>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleDeleteCandidateActivity(activity.id);
+                  }}
+                >
+                  Excluir
+                </button>
               </div>
             </Activity>
           ))}
-      </ActivitiesContainer>
-    </Container>
+        </ActivitiesContainer>
+      </Container>
+    )
   );
 };
 
