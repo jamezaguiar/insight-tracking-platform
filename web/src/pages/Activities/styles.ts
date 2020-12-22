@@ -75,9 +75,7 @@ export const Activity = styled.div`
 
   border-radius: 2px;
 
-  & + div {
-    margin-top: 16px;
-  }
+  margin-bottom: 16px;
 
   h1 {
     color: #000;
@@ -85,25 +83,5 @@ export const Activity = styled.div`
 
   p {
     color: #222;
-  }
-
-  div {
-    button {
-      width: 120px;
-      height: 40px;
-
-      border: none;
-
-      margin: 8px;
-
-      color: #eee;
-      background-color: #007fff;
-
-      transition: background-color 0.2s;
-
-      &:hover {
-        background-color: ${shade(0.2, '#007fff')};
-      }
-    }
   }
 `;
