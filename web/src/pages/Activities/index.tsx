@@ -1,6 +1,8 @@
-import React from 'react';
-import { FiPlus, FiChevronLeft } from 'react-icons/fi';
+import React, { useEffect, useState } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
+import { FiPlus, FiChevronLeft } from 'react-icons/fi';
+
+import api from '../../services/api';
 
 import {
   Container,
@@ -10,20 +12,43 @@ import {
   Activity,
 } from './styles';
 
+interface Activity {
+  id: string;
+  name: string;
+  description: string;
+  year: number;
+}
+interface Candidate {
+  id: string;
+  name: string;
+  email: string;
+  address: string;
+  activities: Activity[];
+}
+
 interface ActivitiesParams {
   candidate_id: string;
 }
 
 const Activities: React.FC = () => {
   const { params } = useRouteMatch<ActivitiesParams>();
+  const [candidate, setCandidate] = useState<Candidate | null>(null);
+
+  useEffect(() => {
+    api.get(`/candidates/${params.candidate_id}`).then((response) => {
+      setCandidate(response.data);
+    });
+  }, [params.candidate_id]);
 
   return (
     <Container>
-      <CandidateInfo>
-        <h1>Jamerson Aguiar</h1>
-        <p>jamersonalsilva14@gmail.com</p>
-        <p>Rua José Correia, N 203, Centro, Ocara-CE</p>
-      </CandidateInfo>
+      {candidate && (
+        <CandidateInfo>
+          <h1>{candidate.name}</h1>
+          <p>{candidate.email}</p>
+          <p>{candidate.address}</p>
+        </CandidateInfo>
+      )}
       <Options>
         <Link to="/">
           <FiChevronLeft size={24} />
@@ -36,17 +61,20 @@ const Activities: React.FC = () => {
       </Options>
 
       <ActivitiesContainer>
-        <Activity>
-          <div>
-            <h1>Typescript Masterclass</h1>
-            <p>Primeiros passos com Typescript; Estrutura de projeto</p>
-            <p>2020</p>
-          </div>
-          <div>
-            <button type="button">Editar</button>
-            <button type="button">Excluir</button>
-          </div>
-        </Activity>
+        {candidate &&
+          candidate.activities.map((activity) => (
+            <Activity key={activity.id}>
+              <div>
+                <h1>{activity.name}</h1>
+                <p>{activity.description}</p>
+                <p>{activity.year}</p>
+              </div>
+              <div>
+                <button type="button">Editar</button>
+                <button type="button">Excluir</button>
+              </div>
+            </Activity>
+          ))}
       </ActivitiesContainer>
     </Container>
   );
