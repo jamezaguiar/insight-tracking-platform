@@ -67,7 +67,9 @@ const Dashboard: React.FC = () => {
               <Link to={`activities/${candidate.id}`}>
                 <button type="button">Ver atividades</button>
               </Link>
-              <button type="button">Editar</button>
+              <Link to={`edit-candidate/${candidate.id}`}>
+                <button type="button">Editar</button>
+              </Link>
               <button
                 type="button"
                 onClick={() => handleDeleteCandidate(candidate.id)}
