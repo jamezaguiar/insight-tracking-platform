@@ -30,20 +30,20 @@ public class Activity implements Serializable {
 	private int year;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "candidate_id")
 	@JsonIgnore
-	private User user;
+	private Candidate candidate;
 
 	public Activity() {
 		super();
 	}
 
-	public Activity(String name, String description, int year, User user) {
+	public Activity(String name, String description, int year, Candidate candidate) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.year = year;
-		this.user = user;
+		this.candidate = candidate;
 	}
 
 	public String getName() {
@@ -70,12 +70,12 @@ public class Activity implements Serializable {
 		this.year = year;
 	}
 
-	public User getUser() {
-		return user;
+	public Candidate getCandidate() {
+		return candidate;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
 	}
 
 	public UUID getId() {

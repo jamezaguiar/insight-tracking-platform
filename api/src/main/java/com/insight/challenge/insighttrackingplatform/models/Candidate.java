@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class Candidate implements Serializable {
 
 	private static final long serialVersionUID = -8803824749850380007L;
 
@@ -27,7 +28,7 @@ public class User implements Serializable {
 
 	private String address;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
 	private List<Activity> activities;
 
 	public String getName() {

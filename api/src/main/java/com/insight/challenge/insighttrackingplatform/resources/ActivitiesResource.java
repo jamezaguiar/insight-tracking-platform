@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insight.challenge.insighttrackingplatform.models.Activity;
-import com.insight.challenge.insighttrackingplatform.models.User;
+import com.insight.challenge.insighttrackingplatform.models.Candidate;
 import com.insight.challenge.insighttrackingplatform.repositories.ActivitiesRepository;
-import com.insight.challenge.insighttrackingplatform.repositories.UsersRepository;
+import com.insight.challenge.insighttrackingplatform.repositories.CandidatesRepository;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 public class ActivitiesResource {
 
 	@Autowired
-	UsersRepository usersRepository;
+	CandidatesRepository candidatesRepository;
 
 	@Autowired
 	ActivitiesRepository activitiesRepository;
@@ -39,20 +39,20 @@ public class ActivitiesResource {
 		return activitiesRepository.findAll();
 	}
 
-	@GetMapping("/activities/{user_id}")
-	@ApiOperation(value = "Returns a list with all user activities.")
-	public List<Activity> listUserActivities(@PathVariable(value = "user_id") UUID user_id) {
-		return activitiesRepository.findByUserId(user_id);
+	@GetMapping("/activities/{candidate_id}")
+	@ApiOperation(value = "Returns a list with all candidate activities.")
+	public List<Activity> listCandidateActivities(@PathVariable(value = "candidate_id") UUID candidate_id) {
+		return activitiesRepository.findByCandidateId(candidate_id);
 	}
 
-	@PostMapping("/activities/{user_id}")
-	@ApiOperation(value = "Records an activity for a specific user.")
-	public Activity registerActivity(@RequestBody Activity activity, @PathVariable(value = "user_id") UUID user_id) {
-		User user = usersRepository.findById(user_id);
-		Activity newActivity = new Activity(activity.getName(), activity.getDescription(), activity.getYear(), user);
-		List<Activity> userActivities = user.getActivities();
-		userActivities.add(newActivity);
-		user.setActivities(userActivities);
+	@PostMapping("/activities/{candidate_id}")
+	@ApiOperation(value = "Records an activity for a specific candidate.")
+	public Activity registerActivity(@RequestBody Activity activity, @PathVariable(value = "candidate_id") UUID candidate_id) {
+		Candidate candidate = candidatesRepository.findById(candidate_id);
+		Activity newActivity = new Activity(activity.getName(), activity.getDescription(), activity.getYear(), candidate);
+		List<Activity> candidateActivities = candidate.getActivities();
+		candidateActivities.add(newActivity);
+		candidate.setActivities(candidateActivities);
 
 		return activitiesRepository.save(newActivity);
 
@@ -65,17 +65,17 @@ public class ActivitiesResource {
 		activitiesRepository.delete(activity);
 	}
 
-	@PutMapping("/activities/{user_id}")
+	@PutMapping("/activities/{candidate_id}")
 	@ApiOperation(value = "Updates a activity.")
-	public Activity updateActivity(@RequestBody Activity activity, @PathVariable(value = "user_id") UUID user_id) {
-		User user = usersRepository.findById(user_id);
+	public Activity updateActivity(@RequestBody Activity activity, @PathVariable(value = "candidate_id") UUID candidate_id) {
+		Candidate candidate = candidatesRepository.findById(candidate_id);
 		Activity oldActivity = activitiesRepository.findById(activity.getId());
-		Activity newActivity = new Activity(activity.getName(), activity.getDescription(), activity.getYear(), user);
-		List<Activity> userActivities = user.getActivities();
-		userActivities.remove(oldActivity);
+		Activity newActivity = new Activity(activity.getName(), activity.getDescription(), activity.getYear(), candidate);
+		List<Activity> candidateActivities = candidate.getActivities();
+		candidateActivities.remove(oldActivity);
 		activitiesRepository.delete(oldActivity);
-		userActivities.add(newActivity);
-		user.setActivities(userActivities);
+		candidateActivities.add(newActivity);
+		candidate.setActivities(candidateActivities);
 
 		return activitiesRepository.save(newActivity);
 	}
