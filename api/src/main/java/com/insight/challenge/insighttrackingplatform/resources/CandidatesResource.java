@@ -66,7 +66,11 @@ public class CandidatesResource {
 	@PutMapping("/candidates")
 	@ApiOperation(value = "Updates a candidate.")
 	public Candidate updateCandidate(@RequestBody Candidate candidate) {
-		return candidatesRepository.save(candidate);
+		Candidate findCandidate = candidatesRepository.findById(candidate.getId());
+		findCandidate.setName(candidate.getName());
+		findCandidate.setEmail(candidate.getEmail());
+		findCandidate.setAddress(candidate.getAddress());
+		return candidatesRepository.save(findCandidate);
 	}
 
 }
