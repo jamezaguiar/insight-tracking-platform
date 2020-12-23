@@ -79,5 +79,11 @@ public class ActivitiesResource {
 
 		return activitiesRepository.save(newActivity);
 	}
+	
+	@GetMapping("/candidate/activities/{activity_id}")
+	@ApiOperation(value = "Returns a specific activity.")
+	public Activity listActivity(@PathVariable(value = "activity_id") UUID activity_id) {
+		return activitiesRepository.findById(activity_id);
+	}
 
 }
