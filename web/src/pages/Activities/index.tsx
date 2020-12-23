@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import { FiPlus, FiChevronLeft } from 'react-icons/fi';
 
+import { useToast } from '../../hooks/toast';
+
 import Button from '../../components/Button';
 
 import api from '../../services/api';
@@ -36,6 +38,8 @@ const Activities: React.FC = () => {
   const { params } = useRouteMatch<ActivitiesParams>();
   const [candidate, setCandidate] = useState<Candidate | null>(null);
 
+  const { addToast } = useToast();
+
   const handleGetCandidate = useCallback(async () => {
     const response = await api.get(`/candidates/${params.candidate_id}`);
     setCandidate(response.data);
@@ -43,10 +47,24 @@ const Activities: React.FC = () => {
 
   const handleDeleteCandidateActivity = useCallback(
     async (activity_id: string) => {
-      await api.delete(`/activities?activity_id=${activity_id}`);
-      handleGetCandidate();
+      try {
+        await api.delete(`/activities?activity_id=${activity_id}`);
+        handleGetCandidate();
+
+        addToast({
+          title: 'Feito!',
+          type: 'success',
+          description: 'Atividade excluída com sucesso!',
+        });
+      } catch (err) {
+        addToast({
+          title: 'Algo deu errado.',
+          type: 'error',
+          description: 'Não foi possível excluir a atividade, tente novamente.',
+        });
+      }
     },
-    [handleGetCandidate],
+    [addToast, handleGetCandidate],
   );
 
   useEffect(() => {
