@@ -5,6 +5,8 @@ import { FiChevronLeft, FiSearch } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 
+import * as Yup from 'yup';
+
 import { useToast } from '../../hooks/toast';
 
 import Input from '../../components/Input';
@@ -17,6 +19,7 @@ import {
   Candidate,
 } from './styles';
 import api from '../../services/api';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 interface FindCandidatesFormData {
   activity_name: string;
@@ -35,22 +38,43 @@ const FindCandidates: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
 
-  const handleSubmit = useCallback(async (data: FindCandidatesFormData) => {
-    const response = await api.get<Candidate[]>(
-      `/candidates/activities?activity_name=${data.activity_name}`,
-    );
+  const handleSubmit = useCallback(
+    async (data: FindCandidatesFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-    if (response.data.length === 0) {
-      addToast({
-        type: 'info',
-        title: 'Não encontrado',
-        description: 'Não foram encontrados candidatos com essa atividade.',
-      });
-    }
+        const schema = Yup.object().shape({
+          activity_name: Yup.string().required('Digite o nome da atividade'),
+        });
 
-    setActivity(data.activity_name);
-    setCandidates(response.data);
-  }, []);
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        const response = await api.get<Candidate[]>(
+          `/candidates/activities?activity_name=${data.activity_name}`,
+        );
+
+        if (response.data.length === 0) {
+          addToast({
+            type: 'info',
+            title: 'Não encontrado',
+            description: 'Não foram encontrados candidatos com essa atividade.',
+          });
+        }
+
+        setActivity(data.activity_name);
+        setCandidates(response.data);
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+        }
+      }
+    },
+    [addToast],
+  );
 
   const handleDeleteCandidate = useCallback(
     async (candidate_id: string) => {

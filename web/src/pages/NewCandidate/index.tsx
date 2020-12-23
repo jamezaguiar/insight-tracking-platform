@@ -5,6 +5,9 @@ import { FiChevronLeft, FiUser, FiMail, FiNavigation } from 'react-icons/fi';
 
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
+
+import * as Yup from 'yup';
+
 import { useToast } from '../../hooks/toast';
 
 import api from '../../services/api';
@@ -13,6 +16,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, FormContainer } from './styles';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 interface NewCandidateFormData {
   name: string;
@@ -32,6 +36,20 @@ const NewCandidate: React.FC = () => {
       try {
         setLoading(true);
 
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Digite o nome do candidato'),
+          email: Yup.string()
+            .email('Digite um email válido')
+            .required('Digite o email do candidato'),
+          address: Yup.string().required('Digite o endereço do candidato'),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
         const response = await api.post('/candidates', data);
 
         addToast({
@@ -42,6 +60,14 @@ const NewCandidate: React.FC = () => {
 
         history.push('/');
       } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
         addToast({
           type: 'error',
           title: 'Erro ao cadastrar candidato',

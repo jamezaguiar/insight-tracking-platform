@@ -5,6 +5,9 @@ import { FiChevronLeft, FiUser, FiMail, FiNavigation } from 'react-icons/fi';
 
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
+
+import * as Yup from 'yup';
+
 import { useToast } from '../../hooks/toast';
 
 import api from '../../services/api';
@@ -13,6 +16,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, FormContainer } from './styles';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 interface EditCandidateParams {
   candidate_id: string;
@@ -57,6 +61,24 @@ const EditCandidate: React.FC = () => {
       try {
         setLoading(true);
 
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          name: Yup.string().required(
+            'Digite um novo nome ou mantenha o antigo',
+          ),
+          email: Yup.string()
+            .email('Digite um email válido')
+            .required('Digite um novo email ou mantenha o antigo'),
+          address: Yup.string().required(
+            'Digite um novo endereço ou mantenha o antigo',
+          ),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
         const response = await api.put('/candidates', {
           id: params.candidate_id,
           name: data.name,
@@ -72,6 +94,14 @@ const EditCandidate: React.FC = () => {
 
         history.push(`/activities/${params.candidate_id}`);
       } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
         addToast({
           type: 'error',
           title: 'Erro ao editar candidato',
