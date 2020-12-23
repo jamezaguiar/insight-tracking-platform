@@ -67,17 +67,20 @@ public class ActivitiesResource {
 
 	@PutMapping("/activities/{candidate_id}")
 	@ApiOperation(value = "Updates a activity.")
-	public Activity updateActivity(@RequestBody Activity activity, @PathVariable(value = "candidate_id") UUID candidate_id) {
+	public Activity updateActivity(@RequestBody Activity activity,
+			@PathVariable(value = "candidate_id") UUID candidate_id) {
 		Candidate candidate = candidatesRepository.findById(candidate_id);
-		Activity oldActivity = activitiesRepository.findById(activity.getId());
-		Activity newActivity = new Activity(activity.getName(), activity.getDescription(), activity.getYear(), candidate);
 		List<Activity> candidateActivities = candidate.getActivities();
-		candidateActivities.remove(oldActivity);
-		activitiesRepository.delete(oldActivity);
-		candidateActivities.add(newActivity);
+		Activity findActivity = activitiesRepository.findById(activity.getId());
+		candidateActivities.remove(findActivity);
+		findActivity.setName(activity.getName());
+		findActivity.setDescription(activity.getDescription());
+		findActivity.setYear(activity.getYear());
+		findActivity.setCandidate(candidate);
+		candidateActivities.add(findActivity);
 		candidate.setActivities(candidateActivities);
 
-		return activitiesRepository.save(newActivity);
+		return activitiesRepository.save(findActivity);
 	}
 	
 	@GetMapping("/candidate/activities/{activity_id}")
