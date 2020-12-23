@@ -82,7 +82,7 @@ const Activities: React.FC = () => {
                 <p>{activity.year}</p>
               </div>
               <div>
-                <Link to={`/edit-activity/${activity.id}`}>
+                <Link to={`/edit-activity/${candidate.id}/${activity.id}`}>
                   <Button type="button">Editar</Button>
                 </Link>
                 <Button

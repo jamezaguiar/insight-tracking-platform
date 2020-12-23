@@ -18,7 +18,10 @@ const Routes: React.FC = () => (
 
     <Route path="/activities/:candidate_id+" component={Activities} />
     <Route path="/new-activity/:candidate_id+" component={NewActivity} />
-    <Route path="/edit-activity/:activity_id+" component={EditActivity} />
+    <Route
+      path="/edit-activity/:candidate_id+/:activity_id+"
+      component={EditActivity}
+    />
 
     <Route path="/edit-candidate/:candidate_id+" component={EditCandidate} />
   </Switch>
